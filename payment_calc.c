@@ -18,7 +18,7 @@
 
 #include <stdio.h>
 
-#define PAYRATE 12.00
+#define PAYRATE 10.00
 #define TAXRATE_300 .15
 #define TAXRATE_150 .20
 #define TAXRATE_REST .25
@@ -36,18 +36,19 @@ int main()
 
     // Calculate gross pay
     pay = ((hours > 40) ? 40 : hours) * PAYRATE;
-    // Add overtime pay
     overtime = hours - 40;
     if (overtime > 0)
         pay += (overtime * (PAYRATE * OVERTIME_COEF));
+
     // Calculate tax
     tax = (pay > 300.0) ? 300.0 * TAXRATE_300 : pay * TAXRATE_300;
-    tax += ((pay - 300.0) > 150.0) ? 150.0 * TAXRATE_150 : (pay - 300.0) * TAXRATE_150;
-    tax += ((pay - 450.0) > 0.0) ? (pay - 450.0) * TAXRATE_REST : 0.0;
+    if (pay - 300 > 0)
+        tax += ((pay - 300.0) > 150.0) ? 150.0 * TAXRATE_150 : (pay - 300.0) * TAXRATE_150;
+    tax += ((pay - 450.0) > .0) ? (pay - 450.0) * TAXRATE_REST : .0;
 
     printf("Gross pay:\t\t$%.2f\n", pay);
     printf("Tax:\t\t\t$%.2f\n", tax);
-    printf("Net pay:\t\t$%.2f\n", pay - tax);
+    printf("Net pay:\t\t$%.2f\n", pay - tax);  // Net calculated
 
     return 0;
 }
